@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox prefHeight="620.0" prefWidth="860.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sante.lims.controller.LoginController">
+   <children>
+      <VBox alignment="CENTER_LEFT" prefHeight="620.0" prefWidth="360.0" spacing="22.0" styleClass="auth-brand-panel" HBox.hgrow="ALWAYS">
+         <children>
+            <VBox spacing="2.0">
+               <children>
+                  <Label text="SANTE" textFill="#ccfbf1">
+                     <font>
+                        <Font name="System Bold" size="40.0" />
+                     </font>
+                  </Label>
+                  <Label text="Diagnostics Ltd" textFill="#ffffff">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <Label text="Laboratory Information Management System" textFill="#d9f8f2" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <VBox spacing="12.0" style="-fx-border-color: rgba(255,255,255,0.30); -fx-border-width: 1 0 0 0; -fx-padding: 22 0 0 0;">
+               <children>
+                  <Label text="- Administrative Governance" textFill="#f8fafc" />
+                  <Label text="- Operational Precision" textFill="#f8fafc" />
+                  <Label text="- Customer Transparency" textFill="#f8fafc" />
+               </children>
+               <VBox.margin>
+                  <Insets top="28.0" />
+               </VBox.margin>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="44.0" left="44.0" right="38.0" top="44.0" />
+         </padding>
+      </VBox>
+
+      <VBox alignment="CENTER" prefHeight="620.0" prefWidth="500.0" spacing="20.0" styleClass="auth-form-panel" HBox.hgrow="ALWAYS">
+         <children>
+            <VBox maxWidth="340.0" spacing="24.0" styleClass="card">
+               <children>
+                  <VBox spacing="6.0">
+                     <children>
+                        <Label styleClass="text-title" text="Sign In" />
+                        <Label styleClass="text-subtitle" text="Access your laboratory workspace." />
+                     </children>
+                  </VBox>
+
+                  <VBox spacing="15.0">
+                     <children>
+                        <VBox spacing="6.0">
+                           <children>
+                              <Label text="Email Address" />
+                              <TextField fx:id="emailField" promptText="admin@sante.com" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="6.0">
+                           <children>
+                              <Label text="Password" />
+                              <PasswordField fx:id="passwordField" promptText="Enter password" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+
+                  <Label fx:id="errorLabel" textFill="#dc2626" wrapText="true" visible="false" />
+                  <Button fx:id="loginButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleLogin" text="Sign In" />
+
+                  <HBox alignment="CENTER" spacing="5.0">
+                     <children>
+                        <Label styleClass="text-subtitle" text="New customer?" />
+                        <Hyperlink onAction="#handleGoToRegister" text="Create account" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+               </padding>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="44.0" left="46.0" right="46.0" top="44.0" />
+         </padding>
+      </VBox>
+   </children>
+</HBox>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="768.0" prefWidth="1024.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sante.lims.controller.AdminDashboardController">
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="20.0" style="-fx-background-color: #1e293b; -fx-border-color: #334155; -fx-border-width: 0 0 1 0; -fx-padding: 0 20 0 20;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="SANTE DIAGNOSTICS" textFill="#2dd4bf">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label text="Administrative Governance Panel" textFill="#94a3b8" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_RIGHT" spacing="15.0">
+               <children>
+                  <VBox alignment="CENTER_RIGHT">
+                     <children>
+                        <Label fx:id="adminNameLabel" style="-fx-font-weight: bold;" text="Admin Name" />
+                        <Label fx:id="adminEmailLabel" styleClass="text-subtitle" text="admin@sante.com" />
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#handleLogout" styleClass="secondary-button" text="Logout" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          
+          <!-- Tab 1: Custom Test Builder -->
+          <Tab text="Custom Test Builder">
+               <content>
+                  <HBox spacing="20.0">
+                     <children>
+                        <!-- Test type form -->
+                        <VBox prefWidth="350.0" spacing="15.0" styleClass="card">
+                           <children>
+                              <Label styleClass="text-header" text="Define New Test Type" />
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Test Name" />
+                                    <TextField fx:id="testNameField" promptText="e.g. Full Blood Count" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Price ($)" />
+                                    <TextField fx:id="testPriceField" promptText="e.g. 75.00" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Turnaround Time (Hours)" />
+                                    <TextField fx:id="testTatField" promptText="e.g. 24" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Result Format" />
+                                    <ComboBox fx:id="testFormatBox" maxWidth="Infinity" promptText="Select Format" />
+                                 </children>
+                              </VBox>
+                              <Label fx:id="testErrorLabel" textFill="#ef4444" visible="false" wrapText="true" />
+                              <Button fx:id="saveTestButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleSaveTest" text="Create Test Type" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                        
+                        <!-- Test type list table -->
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="text-header" text="Active Test Menu" />
+                              <TableView fx:id="testTypeTable" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn fx:id="colTestId" prefWidth="60.0" text="ID" />
+                                  <TableColumn fx:id="colTestName" prefWidth="180.0" text="Test Name" />
+                                    <TableColumn fx:id="colTestPrice" prefWidth="100.0" text="Price" />
+                                    <TableColumn fx:id="colTestTat" prefWidth="100.0" text="TAT (Hours)" />
+                                    <TableColumn fx:id="colTestFormat" prefWidth="120.0" text="Format" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+               </content>
+          </Tab>
+          
+          <!-- Tab 2: Test Request Queue -->
+          <Tab text="Test Request Queue">
+               <content>
+                  <VBox spacing="15.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <Label styleClass="text-header" text="Patient Request Records" HBox.hgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" onAction="#handleMarkAsPaid" text="Mark as Paid" />
+                           </children>
+                        </HBox>
+                        <TableView fx:id="requestTable" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn fx:id="colReqId" prefWidth="60.0" text="Req ID" />
+                            <TableColumn fx:id="colReqPatient" prefWidth="150.0" text="Patient" />
+                              <TableColumn fx:id="colReqTest" prefWidth="180.0" text="Test Type" />
+                              <TableColumn fx:id="colReqPayment" prefWidth="120.0" text="Payment Status" />
+                              <TableColumn fx:id="colReqEvidence" prefWidth="150.0" text="Payment Ref" />
+                              <TableColumn fx:id="colReqSample" prefWidth="150.0" text="Sample Status" />
+                              <TableColumn fx:id="colReqDate" prefWidth="150.0" text="Order Date" />
+                          </columns>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </content>
+          </Tab>
+          
+          <!-- Tab 3: User Provisioning -->
+          <Tab text="User Provisioning">
+               <content>
+                  <HBox spacing="20.0">
+                     <children>
+                        <!-- Provision user form -->
+                        <VBox prefWidth="350.0" spacing="15.0" styleClass="card">
+                           <children>
+                              <Label styleClass="text-header" text="Register Staff / Customer" />
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Full Name" />
+                                    <TextField fx:id="usrNameField" promptText="Enter full name" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Email Address" />
+                                    <TextField fx:id="usrEmailField" promptText="staff@sante.com" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Temporary Password" />
+                                    <PasswordField fx:id="usrPasswordField" promptText="••••••••" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Account Role" />
+                                    <ComboBox fx:id="usrRoleBox" maxWidth="Infinity" promptText="Select Role" />
+                                 </children>
+                              </VBox>
+                              <Label fx:id="usrErrorLabel" textFill="#ef4444" visible="false" wrapText="true" />
+                              <Button fx:id="provisionButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleProvisionUser" text="Create Account" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                        
+                        <!-- User list table -->
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="text-header" text="Active User Registry" />
+                              <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn fx:id="colUsrId" prefWidth="60.0" text="ID" />
+                                  <TableColumn fx:id="colUsrName" prefWidth="180.0" text="Name" />
+                                    <TableColumn fx:id="colUsrEmail" prefWidth="220.0" text="Email" />
+                                    <TableColumn fx:id="colUsrRole" prefWidth="150.0" text="Role" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+               </content>
+          </Tab>
+          
+          <!-- Tab 4: Immutable Audit Trail -->
+          <Tab text="Audit Trail">
+               <content>
+                  <VBox spacing="15.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                           <children>
+                              <Label styleClass="text-header" text="System Log File" HBox.hgrow="ALWAYS" />
+                              <TextField fx:id="auditSearchField" prefWidth="250.0" promptText="Search actions or emails..." />
+                           </children>
+                        </HBox>
+                        <TableView fx:id="auditTable" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn fx:id="colAuditId" prefWidth="60.0" text="Log ID" />
+                            <TableColumn fx:id="colAuditUser" prefWidth="180.0" text="User Email" />
+                              <TableColumn fx:id="colAuditAction" prefWidth="180.0" text="Action" />
+                              <TableColumn fx:id="colAuditDetails" prefWidth="400.0" text="Details" />
+                              <TableColumn fx:id="colAuditTime" prefWidth="160.0" text="Timestamp" />
+                          </columns>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </content>
+          </Tab>
+          
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
