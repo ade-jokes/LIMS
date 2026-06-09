@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="768.0" prefWidth="1024.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sante.lims.controller.CustomerDashboardController">
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="20.0" style="-fx-background-color: #1e293b; -fx-border-color: #334155; -fx-border-width: 0 0 1 0; -fx-padding: 0 20 0 20;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label style="-fx-font-weight: 800; -fx-font-size: 18px; -fx-text-fill: #2dd4bf;" text="SANTE DIAGNOSTICS" />
+                  <Label style="-fx-text-fill: #94a3b8;" text="Patient Health Hub" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_RIGHT" spacing="15.0">
+               <children>
+                  <VBox alignment="CENTER_RIGHT">
+                     <children>
+                        <Label fx:id="patientNameLabel" style="-fx-font-weight: bold; -fx-text-fill: #f8fafc;" text="Patient Name" />
+                        <Label fx:id="patientEmailLabel" style="-fx-text-fill: #94a3b8;" text="patient@example.com" />
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#handleLogout" styleClass="secondary-button" text="Logout" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          
+          <!-- Tab 1: Book Test -->
+          <Tab text="Book Diagnostics Test">
+               <content>
+                  <HBox spacing="20.0">
+                     <children>
+                        <!-- Left available test menu -->
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="text-header" text="Available Laboratory Tests Menu" />
+                              <TableView fx:id="testMenuTable" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn fx:id="colMenuId" prefWidth="60.0" text="ID" />
+                                  <TableColumn fx:id="colMenuName" prefWidth="220.0" text="Test Type Name" />
+                                    <TableColumn fx:id="colMenuPrice" prefWidth="120.0" text="Cost ($)" />
+                                    <TableColumn fx:id="colMenuTat" prefWidth="140.0" text="Turnaround Time" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Right order checkout card -->
+                        <VBox prefWidth="380.0" spacing="15.0" styleClass="card">
+                           <children>
+                              <Label styleClass="text-header" text="Direct Checkout" />
+                              
+                              <VBox spacing="8.0" style="-fx-border-color: #334155; -fx-border-width: 0 0 1 0; -fx-padding: 0 0 10 0;">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold;" text="Selected Test Details:" />
+                                    <Label fx:id="checkoutTestNameLabel" text="No test selected" textFill="#2dd4bf" />
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label text="Total Cost:" textFill="#94a3b8" />
+                                          <Label fx:id="checkoutPriceLabel" text="-$0.00" textFill="#e2e8f0" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Bank transfer bank info — populated from DB on load -->
+                              <VBox spacing="5.0" style="-fx-background-color: #0f172a; -fx-padding: 12px; -fx-background-radius: 6px; -fx-border-color: #0d9488; -fx-border-width: 1px; -fx-border-radius: 6px;">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-text-fill: #2dd4bf;" text="Lab Bank Account Details:" />
+                                    <Label fx:id="bankNameLabel" style="-fx-text-fill: #f8fafc; -fx-font-weight: bold;" text="Loading..." />
+                                    <Label fx:id="bankAccountNameLabel" style="-fx-text-fill: #f8fafc;" text="" />
+                                    <Label fx:id="bankAccountNumberLabel" style="-fx-text-fill: #f8fafc; -fx-font-size: 15px; -fx-font-weight: bold;" text="" />
+                                    <Label fx:id="bankInstructionsLabel" style="-fx-font-size: 11px; -fx-text-fill: #cbd5e1;" text="" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Payment Reference / Evidence" />
+                                    <TextField fx:id="paymentRefField" promptText="Enter transaction ID or Ref" />
+                                 </children>
+                              </VBox>
+                              
+                              <Label fx:id="checkoutErrorLabel" textFill="#ef4444" visible="false" wrapText="true" />
+                              
+                              <Button fx:id="placeOrderButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#handlePlaceOrder" text="Submit Booking Order" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+               </content>
+          </Tab>
+          
+          <!-- Tab 2: Patient Dashboard & Countdown -->
+          <Tab text="Active Tracking &amp; Timers">
+               <content>
+                  <VBox spacing="15.0">
+                     <children>
+                        <Label styleClass="text-header" text="Ongoing Test Requests &amp; Live Turnaround Timers" />
+                        <TableView fx:id="activeRequestsTable" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn fx:id="colActId" prefWidth="60.0" text="ID" />
+                            <TableColumn fx:id="colActName" prefWidth="220.0" text="Diagnostics Test" />
+                              <TableColumn fx:id="colActPayment" prefWidth="120.0" text="Payment" />
+                              <TableColumn fx:id="colActSample" prefWidth="180.0" text="Sample Status" />
+                              <TableColumn fx:id="colActOrdered" prefWidth="160.0" text="Ordered At" />
+                              <TableColumn fx:id="colActTimer" prefWidth="200.0" text="Time Remaining (TAT)" />
+                          </columns>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </content>
+          </Tab>
+          
+          <!-- Tab 3: Result Vault -->
+          <Tab text="Result Vault">
+               <content>
+                  <HBox spacing="20.0">
+                     <children>
+                        <!-- Left completed results list -->
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="text-header" text="Validated Laboratory Diagnostic Reports" />
+                              <TableView fx:id="resultsTable" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn fx:id="colResId" prefWidth="60.0" text="ID" />
+                                  <TableColumn fx:id="colResName" prefWidth="220.0" text="Diagnostics Test" />
+                                    <TableColumn fx:id="colResFormat" prefWidth="120.0" text="Report Format" />
+                                    <TableColumn fx:id="colResValidated" prefWidth="180.0" text="Released At" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Right detailed viewer pane -->
+                        <VBox fx:id="resultViewerCard" prefWidth="420.0" spacing="12.0" styleClass="card">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label styleClass="text-header" style="-fx-font-size: 15px;" text="Diagnostic Report Details" HBox.hgrow="ALWAYS" />
+                                    <Button mnemonicParsing="false" onAction="#handlePrintResult" style="-fx-font-size: 11px;" text="🖨 Print Report" />
+                                 </children>
+                              </HBox>
+
+                              <!-- Patient + Test info block -->
+                              <VBox spacing="6.0" style="-fx-background-color: #0f172a; -fx-padding: 12px; -fx-background-radius: 6px; -fx-border-color: #334155; -fx-border-width: 1px;">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-text-fill: #2dd4bf;" text="Patient Information" />
+                                    <HBox spacing="8.0">
+                                       <children>
+                                          <Label style="-fx-text-fill: #94a3b8; -fx-min-width: 100px;" text="Patient:" />
+                                          <Label fx:id="viewPatientNameLabel" style="-fx-text-fill: #f8fafc; -fx-font-weight: bold;" text="—" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0">
+                                       <children>
+                                          <Label style="-fx-text-fill: #94a3b8; -fx-min-width: 100px;" text="Email:" />
+                                          <Label fx:id="viewPatientEmailLabel" style="-fx-text-fill: #f8fafc;" text="—" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0">
+                                       <children>
+                                          <Label style="-fx-text-fill: #94a3b8; -fx-min-width: 100px;" text="Test Name:" />
+                                          <Label fx:id="viewTestNameLabel" style="-fx-text-fill: #2dd4bf; -fx-font-weight: bold;" text="None" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0">
+                                       <children>
+                                          <Label style="-fx-text-fill: #94a3b8; -fx-min-width: 100px;" text="Format:" />
+                                          <Label fx:id="viewFormatLabel" style="-fx-text-fill: #f8fafc;" text="—" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0">
+                                       <children>
+                                          <Label style="-fx-text-fill: #94a3b8; -fx-min-width: 100px;" text="Ordered At:" />
+                                          <Label fx:id="viewOrderedLabel" style="-fx-text-fill: #f8fafc;" text="—" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0">
+                                       <children>
+                                          <Label style="-fx-text-fill: #94a3b8; -fx-min-width: 100px;" text="Released At:" />
+                                          <Label fx:id="viewDateLabel" style="-fx-text-fill: #f8fafc;" text="None" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0">
+                                       <children>
+                                          <Label style="-fx-text-fill: #94a3b8; -fx-min-width: 100px;" text="Validated By:" />
+                                          <Label fx:id="viewValidatorLabel" style="-fx-text-fill: #f8fafc;" text="—" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+
+                              <!-- Numeric / Text result box -->
+                              <VBox fx:id="viewContentBox" prefHeight="100.0" spacing="5.0" style="-fx-background-color: #0f172a; -fx-padding: 15; -fx-background-radius: 6px; -fx-border-color: #334155; -fx-border-width: 1px;">
+                                 <children>
+                                    <Label style="-fx-font-weight: bold; -fx-text-fill: #94a3b8;" text="Result Data:" />
+                                    <Label fx:id="viewResultValLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2dd4bf;" text="None" wrapText="true" />
+                                 </children>
+                              </VBox>
+
+                              <!-- Image preview -->
+                              <VBox fx:id="viewImageContainer" alignment="CENTER" prefHeight="180.0" spacing="5.0" style="-fx-background-color: #0f172a; -fx-padding: 10; -fx-background-radius: 6px; -fx-border-color: #334155; -fx-border-width: 1px;">
+                                 <children>
+                                    <Label style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;" text="Medical Image Attachment:" />
+                                    <ImageView fx:id="viewImageView" fitHeight="150.0" fitWidth="280.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </VBox>
+
+                              <!-- PDF indicator -->
+                              <VBox fx:id="viewPdfBox" spacing="6.0" style="-fx-background-color: #0f172a; -fx-padding: 12; -fx-background-radius: 6px; -fx-border-color: #334155; -fx-border-width: 1px;">
+                                 <children>
+                                    <Label style="-fx-font-size: 13px; -fx-text-fill: #94a3b8;" text="PDF Document Attached" />
+                                    <Label style="-fx-font-size: 11px; -fx-text-fill: #64748b;" text="Click Download below to save the full report." />
+                                 </children>
+                              </VBox>
+
+                              <Button fx:id="downloadAttachmentButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleDownloadAttachment" text="⬇  Download Report File" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+               </content>
+          </Tab>
+          
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>

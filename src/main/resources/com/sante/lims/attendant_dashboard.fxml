@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="768.0" prefWidth="1024.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sante.lims.controller.AttendantDashboardController">
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="20.0" style="-fx-background-color: #1e293b; -fx-border-color: #334155; -fx-border-width: 0 0 1 0; -fx-padding: 0 20 0 20;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="SANTE DIAGNOSTICS" textFill="#2dd4bf" style="-fx-font-weight: 800; -fx-font-size: 18px;">
+                  </Label>
+                  <Label text="Lab Attendant Operational Console" textFill="#94a3b8" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_RIGHT" spacing="15.0">
+               <children>
+                  <VBox alignment="CENTER_RIGHT">
+                     <children>
+                        <Label fx:id="attendantNameLabel" style="-fx-font-weight: bold;" text="Attendant Name" />
+                        <Label fx:id="attendantEmailLabel" styleClass="text-subtitle" text="attendant@sante.com" />
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#handleLogout" styleClass="secondary-button" text="Logout" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          
+          <!-- Tab 1: Request & Payments -->
+          <Tab text="Payment Verification">
+               <content>
+                  <VBox spacing="15.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <Label styleClass="text-header" text="Test Requests Awaiting Payment Confirmation" HBox.hgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" onAction="#handleMarkAsPaid" text="Confirm Payment" />
+                           </children>
+                        </HBox>
+                        <TableView fx:id="paymentTable" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn fx:id="colPayId" prefWidth="60.0" text="ID" />
+                            <TableColumn fx:id="colPayPatient" prefWidth="180.0" text="Patient Name" />
+                              <TableColumn fx:id="colPayTest" prefWidth="200.0" text="Test Type" />
+                              <TableColumn fx:id="colPayPrice" prefWidth="100.0" text="Cost" />
+                              <TableColumn fx:id="colPayStatus" prefWidth="120.0" text="Payment Status" />
+                              <TableColumn fx:id="colPayEvidence" prefWidth="180.0" text="Payment Reference" />
+                              <TableColumn fx:id="colPayDate" prefWidth="150.0" text="Ordered At" />
+                          </columns>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </content>
+          </Tab>
+          
+          <!-- Tab 2: Sample Lifecycle Tracking -->
+          <Tab text="Sample Lifecycle Tracking">
+               <content>
+                  <VBox spacing="15.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                           <children>
+                              <Label styleClass="text-header" text="Sample Lifecycle Tracking Board" HBox.hgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" onAction="#handleMarkAsCollected" styleClass="button" text="Mark Collected" />
+                              <Button mnemonicParsing="false" onAction="#handleMarkAsProcessing" styleClass="button" text="Send to Processing" />
+                              <Button fx:id="quickValidateButton" mnemonicParsing="false" onAction="#handleQuickValidate" styleClass="button" text="Validate Sample" />
+                           </children>
+                        </HBox>
+                        <Label style="-fx-font-size:11px; -fx-opacity:0.6;" text="Select a row then click the matching stage button. All paid samples (including Validated) are shown below." />
+                        <TableView fx:id="sampleTable" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn fx:id="colSampleId" prefWidth="55.0" text="ID" />
+                            <TableColumn fx:id="colSamplePatient" prefWidth="160.0" text="Patient Name" />
+                              <TableColumn fx:id="colSampleTest" prefWidth="180.0" text="Test Type" />
+                              <TableColumn fx:id="colSamplePay" prefWidth="90.0" text="Payment" />
+                              <TableColumn fx:id="colSampleStatus" prefWidth="150.0" text="Sample Status" />
+                              <TableColumn fx:id="colSampleCollectedAt" prefWidth="130.0" text="Collected At" />
+                              <TableColumn fx:id="colSampleProcessedAt" prefWidth="130.0" text="Processed At" />
+                              <TableColumn fx:id="colSampleValidatedAt" prefWidth="130.0" text="Validated At" />
+                          </columns>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </content>
+          </Tab>
+          
+          <!-- Tab 3: Result entry and Validation -->
+          <Tab text="Result entry &amp; Validation">
+               <content>
+                  <HBox spacing="20.0">
+                     <children>
+                        <!-- Left request selection -->
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="text-header" text="Samples in Laboratory Processing" />
+                              <TableView fx:id="processingTable" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn fx:id="colProcId" prefWidth="60.0" text="ID" />
+                                  <TableColumn fx:id="colProcPatient" prefWidth="150.0" text="Patient Name" />
+                                    <TableColumn fx:id="colProcTest" prefWidth="160.0" text="Test Name" />
+                                    <TableColumn fx:id="colProcFormat" prefWidth="100.0" text="Format" />
+                                    <TableColumn fx:id="colProcStatus" prefWidth="120.0" text="Status" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Right dynamic result entry panel -->
+                        <VBox fx:id="resultEntryCard" prefWidth="400.0" spacing="15.0" styleClass="card">
+                           <children>
+                              <Label styleClass="text-header" text="Result Entry Form" />
+                              <VBox spacing="10.0">
+                                 <children>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label style="-fx-font-weight: bold;" text="Selected ID:" />
+                                          <Label fx:id="selectedReqIdLabel" text="None" textFill="#2dd4bf" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label style="-fx-font-weight: bold;" text="Test Format:" />
+                                          <Label fx:id="selectedFormatLabel" text="None" textFill="#2dd4bf" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Numeric result component -->
+                              <VBox fx:id="numericPane" spacing="5.0">
+                                 <children>
+                                    <Label text="Enter Value (Numeric)" />
+                                    <TextField fx:id="numericField" promptText="e.g., 4.5" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Text result component -->
+                              <VBox fx:id="textPane" spacing="5.0">
+                                 <children>
+                                    <Label text="Enter Description / Comments" />
+                                    <TextArea fx:id="textResultArea" prefHeight="100.0" promptText="Type result summary here..." wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- PDF / Image Attachment Component -->
+                              <VBox fx:id="filePane" spacing="10.0">
+                                 <children>
+                                    <Label fx:id="fileLabel" text="Upload Attachment File" />
+                                    <HBox spacing="10.0">
+                                       <children>
+                                          <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFile" styleClass="secondary-button" text="Choose File" />
+                                          <Label fx:id="fileNameLabel" styleClass="text-subtitle" text="No file selected" wrapText="true" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              
+                              <Label fx:id="resultErrorLabel" textFill="#ef4444" visible="false" wrapText="true" />
+                              
+                              <VBox spacing="10.0">
+                                 <children>
+                                    <Button fx:id="saveResultButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleSaveResult" styleClass="secondary-button" text="Save Draft Result" />
+                                    <Button fx:id="validateResultButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleValidateResult" text="Validate &amp; Release Result" />
+                                 </children>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+               </content>
+          </Tab>
+
+          <!-- Tab 4: Customer Provisioning -->
+          <Tab text="Customer Provisioning">
+               <content>
+                  <VBox spacing="18.0">
+                     <children>
+                        <Label styleClass="text-header" text="Create Customer Account" />
+                        <VBox maxWidth="460.0" spacing="12.0" styleClass="card">
+                           <children>
+                              <Label styleClass="text-subtitle" text="Staff-created customer accounts require a password change on first login." wrapText="true" />
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Customer Name" />
+                                    <TextField fx:id="customerNameField" promptText="Full name" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Customer Email" />
+                                    <TextField fx:id="customerEmailField" promptText="patient@example.com" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label text="Temporary Password" />
+                                    <PasswordField fx:id="customerPasswordField" promptText="Minimum 6 characters" />
+                                 </children>
+                              </VBox>
+                              <Label fx:id="customerProvisionErrorLabel" textFill="#ef4444" visible="false" wrapText="true" />
+                              <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleCreateCustomer" text="Create Customer Account" />
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </content>
+          </Tab>
+          
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
