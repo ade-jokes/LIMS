@@ -29,6 +29,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import javafx.print.PrinterJob;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import com.sante.lims.App;
 import com.sante.lims.model.TestRequest;
 import com.sante.lims.model.TestResult;
@@ -83,7 +86,12 @@ public class CustomerDashboardController {
     @FXML private VBox resultViewerCard;
     @FXML private Label viewTestNameLabel;
     @FXML private Label viewDateLabel;
-    
+    @FXML private Label viewPatientNameLabel;
+    @FXML private Label viewPatientEmailLabel;
+    @FXML private Label viewFormatLabel;
+    @FXML private Label viewOrderedLabel;
+    @FXML private Label viewValidatorLabel;
+
     @FXML private VBox viewContentBox;
     @FXML private Label viewResultValLabel;
 
@@ -369,10 +377,17 @@ public class CustomerDashboardController {
 
     private void loadAndDisplayResult(TestRequest req) {
         selectedRequestForResult = req;
+
+        // Populate patient + test info (all new labels)
         viewTestNameLabel.setText(req.getTestTypeName());
         viewDateLabel.setText(req.getValidatedAt() != null ? req.getValidatedAt().toString() : "N/A");
+        viewPatientNameLabel.setText(patientUser.getName());
+        viewPatientEmailLabel.setText(patientUser.getEmail());
+        viewFormatLabel.setText(req.getTestTypeResultFormat() != null
+                ? req.getTestTypeResultFormat().toUpperCase() : "—");
+        viewOrderedLabel.setText(req.getCreatedAt() != null ? req.getCreatedAt().toString() : "—");
 
-        // Clear sub-panes
+        // Hide all sub-panes first
         viewContentBox.setVisible(false);
         viewContentBox.setManaged(false);
         viewImageContainer.setVisible(false);
@@ -380,8 +395,9 @@ public class CustomerDashboardController {
         viewPdfBox.setVisible(false);
         viewPdfBox.setManaged(false);
         downloadAttachmentButton.setVisible(false);
+        if (viewValidatorLabel != null) viewValidatorLabel.setText("—");
 
-        // Fetch result data
+        // Fetch result data from DB
         String sql = "SELECT r.*, u.name as validator_name "
                    + "FROM results r "
                    + "LEFT JOIN users u ON r.validated_by = u.id "
@@ -403,31 +419,53 @@ public class CustomerDashboardController {
                     currentLoadedResult.setValidatedByName(rs.getString("validator_name"));
                     currentLoadedResult.setValidatedAt(rs.getTimestamp("validated_at"));
 
+                    if (viewValidatorLabel != null) {
+                        viewValidatorLabel.setText(
+                            currentLoadedResult.getValidatedByName() != null
+                            ? currentLoadedResult.getValidatedByName() : "Lab Staff"
+                        );
+                    }
+
+                    // Case-insensitive format check
                     String format = req.getTestTypeResultFormat();
-                    
-                    if ("numeric".equals(format) || "text".equals(format)) {
+                    String fmt = format != null ? format.toLowerCase() : "";
+
+                    if ("numeric".equals(fmt) || "text".equals(fmt)) {
                         viewContentBox.setVisible(true);
                         viewContentBox.setManaged(true);
-                        viewResultValLabel.setText(currentLoadedResult.getResultValue());
-                    } else if ("image".equals(format)) {
+                        String val = currentLoadedResult.getResultValue();
+                        viewResultValLabel.setText(val != null && !val.isEmpty() ? val : "(No result value entered)");
+                    } else if ("image".equals(fmt)) {
                         viewImageContainer.setVisible(true);
                         viewImageContainer.setManaged(true);
                         downloadAttachmentButton.setVisible(true);
-
                         if (currentLoadedResult.getFileData() != null) {
                             try {
                                 Image img = new Image(new ByteArrayInputStream(currentLoadedResult.getFileData()));
                                 viewImageView.setImage(img);
                             } catch (Exception e) {
-                                e.printStackTrace();
-                                System.err.println("Failed to display image.");
+                                System.err.println("Failed to display image: " + e.getMessage());
                             }
                         }
-                    } else if ("PDF".equals(format)) {
+                    } else if ("pdf".equals(fmt)) {
                         viewPdfBox.setVisible(true);
                         viewPdfBox.setManaged(true);
                         downloadAttachmentButton.setVisible(true);
+                    } else {
+                        // Unknown format — show whatever text value exists
+                        viewContentBox.setVisible(true);
+                        viewContentBox.setManaged(true);
+                        String val = currentLoadedResult.getResultValue();
+                        viewResultValLabel.setText(val != null && !val.isEmpty() ? val : "(No result data available)");
+                        if (currentLoadedResult.getFileData() != null) {
+                            downloadAttachmentButton.setVisible(true);
+                        }
                     }
+                } else {
+                    // Result row exists in test_requests but not yet in results table
+                    viewContentBox.setVisible(true);
+                    viewContentBox.setManaged(true);
+                    viewResultValLabel.setText("Result is validated but data has not been entered yet. Contact the lab.");
                 }
             }
 
@@ -443,6 +481,83 @@ public class CustomerDashboardController {
         resultViewerCard.setVisible(false);
         selectedRequestForResult = null;
         currentLoadedResult = null;
+    }
+
+    @FXML
+    void handlePrintResult(ActionEvent event) {
+        if (selectedRequestForResult == null) {
+            showAlert("Nothing Selected", "Please select a result from the list to print.");
+            return;
+        }
+
+        // Build a printable text document of the full result
+        StringBuilder content = new StringBuilder();
+        content.append("════════════════════════════════════════════════════\n");
+        content.append("         SANTE DIAGNOSTICS LTD\n");
+        content.append("         Laboratory Diagnostic Report\n");
+        content.append("════════════════════════════════════════════════════\n\n");
+        content.append("PATIENT INFORMATION\n");
+        content.append("────────────────────────────────────────────────────\n");
+        content.append("Name          : ").append(patientUser.getName()).append("\n");
+        content.append("Email         : ").append(patientUser.getEmail()).append("\n\n");
+        content.append("TEST DETAILS\n");
+        content.append("────────────────────────────────────────────────────\n");
+        content.append("Test Name     : ").append(selectedRequestForResult.getTestTypeName()).append("\n");
+        content.append("Report Format : ").append(
+            selectedRequestForResult.getTestTypeResultFormat() != null
+            ? selectedRequestForResult.getTestTypeResultFormat().toUpperCase() : "N/A"
+        ).append("\n");
+        content.append("Date Ordered  : ").append(
+            selectedRequestForResult.getCreatedAt() != null
+            ? selectedRequestForResult.getCreatedAt().toString() : "N/A"
+        ).append("\n");
+        content.append("Date Released : ").append(
+            selectedRequestForResult.getValidatedAt() != null
+            ? selectedRequestForResult.getValidatedAt().toString() : "N/A"
+        ).append("\n");
+        if (currentLoadedResult != null && currentLoadedResult.getValidatedByName() != null) {
+            content.append("Validated By  : ").append(currentLoadedResult.getValidatedByName()).append("\n");
+        }
+        content.append("\nRESULT\n");
+        content.append("────────────────────────────────────────────────────\n");
+        if (currentLoadedResult != null && currentLoadedResult.getResultValue() != null
+                && !currentLoadedResult.getResultValue().isEmpty()) {
+            content.append(currentLoadedResult.getResultValue()).append("\n");
+        } else if (currentLoadedResult != null && currentLoadedResult.getFileData() != null) {
+            content.append("[Attachment: ").append(currentLoadedResult.getFileName()).append("]\n");
+            content.append("Please download the file for the full report.\n");
+        } else {
+            content.append("Result data not available in text form.\n");
+        }
+        content.append("\n════════════════════════════════════════════════════\n");
+        content.append("This report was generated by Sante Diagnostics LIMS.\n");
+        content.append("For queries: aduraayeni5@gmail.com\n");
+
+        // Build a printable node using TextFlow
+        Text printText = new Text(content.toString());
+        printText.setStyle("-fx-font-family: 'Courier New', monospace; -fx-font-size: 11px;");
+        TextFlow printNode = new TextFlow(printText);
+        printNode.setPrefWidth(550);
+        printNode.setStyle("-fx-padding: 30px;");
+
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job != null) {
+            boolean proceed = job.showPrintDialog(App.getPrimaryStage());
+            if (proceed) {
+                boolean printed = job.printPage(printNode);
+                if (printed) {
+                    job.endJob();
+                    AuditService.log(patientUser.getId(), patientUser.getEmail(), "PRINT_REPORT",
+                                     "Printed result for: " + selectedRequestForResult.getTestTypeName()
+                                     + " (Request ID: " + selectedRequestForResult.getId() + ")");
+                    showAlert("Print Successful", "Report sent to printer successfully.");
+                } else {
+                    showAlert("Print Failed", "The print job failed. Please try again.");
+                }
+            }
+        } else {
+            showAlert("No Printer", "No printer is available on this machine.");
+        }
     }
 
     @FXML

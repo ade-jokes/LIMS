@@ -1003,3 +1003,58 @@ PasswordField > .text-field-content {
 .hyperlink:hover:visited {
     -fx-text-fill: #115e59;
 }
+
+/* ── 20. DARK BACKGROUND TEXT OVERRIDES ─────────────────────── */
+
+/* Top navbar — all labels white regardless of .label override */
+HBox[style*="#1e293b"] .label,
+HBox[style*="1e293b"] .label {
+    -fx-text-fill: #ffffff;
+}
+
+/* Any VBox/HBox with dark navy (#0f172a) background —
+   all child labels must be white (bank panel, result viewer boxes) */
+VBox[style*="#0f172a"] .label,
+VBox[style*="0f172a"] .label {
+    -fx-text-fill: #f8fafc;
+}
+
+/* Bank details panel specifically */
+VBox[style*="#0f172a"] > .label,
+VBox[style*="0f172a"] > .label {
+    -fx-text-fill: #f8fafc;
+}
+
+/* Teal/green accent labels stay teal */
+VBox[style*="#0f172a"] .label[style*="2dd4bf"],
+VBox[style*="0f172a"] .label[style*="2dd4bf"] {
+    -fx-text-fill: #2dd4bf;
+}
+
+/* Navbar top bar — patient name, email, brand */
+.top > HBox .label {
+    -fx-text-fill: #f8fafc;
+}
+.top > HBox .text-subtitle {
+    -fx-text-fill: #94a3b8;
+}
+
+/* Result viewer dark boxes */
+VBox[style*="background-color: #0f172a"] Label {
+    -fx-text-fill: #f8fafc;
+}
+
+/* Table header dark area */
+.table-view .column-header-background {
+    -fx-background-color: #1e293b;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #f8fafc !important;
+    -fx-font-weight: 700;
+}
+
+/* Card on dark: text-header should stay dark (cards are light) */
+.card .text-header {
+    -fx-text-fill: #0f766e;
+}
+
