@@ -60,6 +60,8 @@ public class AttendantDashboardController {
     @FXML private TableColumn<TestRequest, String> colSampleStatus;
     @FXML private TableColumn<TestRequest, Timestamp> colSampleCollectedAt;
     @FXML private TableColumn<TestRequest, Timestamp> colSampleProcessedAt;
+    @FXML private TableColumn<TestRequest, Timestamp> colSampleValidatedAt;
+    @FXML private Button quickValidateButton;
 
     // Tab 3: Result Entry
     @FXML private TableView<TestRequest> processingTable;
@@ -152,6 +154,7 @@ public class AttendantDashboardController {
         colSampleStatus.setCellValueFactory(new PropertyValueFactory<>("sampleStatus"));
         colSampleCollectedAt.setCellValueFactory(new PropertyValueFactory<>("collectedAt"));
         colSampleProcessedAt.setCellValueFactory(new PropertyValueFactory<>("processedAt"));
+        colSampleValidatedAt.setCellValueFactory(new PropertyValueFactory<>("validatedAt"));
 
         // Tab 3 columns
         colProcId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -216,6 +219,7 @@ public class AttendantDashboardController {
 
     private void loadSampleData() {
         sampleRequests.clear();
+        // Show ALL paid samples across every stage so the full lifecycle is visible
         String sql = "SELECT tr.*, u.name as customer_name, u.email as customer_email, tt.name as test_name, tt.price as test_price, tt.tat_hours as test_tat, tt.result_format as test_format "
                    + "FROM test_requests tr "
                    + "JOIN users u ON tr.customer_id = u.id "
@@ -295,6 +299,66 @@ public class AttendantDashboardController {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleQuickValidate(ActionEvent event) {
+        TestRequest selected = sampleTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("No Selection", "Please select a request from the tracking board.");
+            return;
+        }
+
+        if ("Validated".equals(selected.getSampleStatus())) {
+            showAlert("Already Validated", "This sample has already been validated and the result released.");
+            return;
+        }
+
+        if (!"Processing".equals(selected.getSampleStatus())) {
+            showAlert("Invalid Stage", "Sample must be in 'Processing' status before it can be validated.\n"
+                    + "Current status: " + selected.getSampleStatus());
+            return;
+        }
+
+        // Mark sample as Validated and create/update result record as validated
+        String updateReqSql = "UPDATE test_requests SET sample_status = 'Validated', validated_at = CURRENT_TIMESTAMP WHERE id = ?";
+        String upsertResultSql = "INSERT INTO results (request_id, is_validated, validated_by, validated_at) "
+                               + "VALUES (?, true, ?, CURRENT_TIMESTAMP) "
+                               + "ON CONFLICT (request_id) DO UPDATE SET "
+                               + "is_validated = true, validated_by = EXCLUDED.validated_by, validated_at = EXCLUDED.validated_at";
+
+        try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement p1 = conn.prepareStatement(updateReqSql);
+                 PreparedStatement p2 = conn.prepareStatement(upsertResultSql)) {
+
+                p1.setInt(1, selected.getId());
+                p1.executeUpdate();
+
+                p2.setInt(1, selected.getId());
+                p2.setInt(2, attendantUser.getId());
+                p2.executeUpdate();
+
+                conn.commit();
+            } catch (SQLException inner) {
+                conn.rollback();
+                throw inner;
+            }
+
+            AuditService.log(attendantUser.getId(), attendantUser.getEmail(), "VALIDATE_RESULT",
+                             "Validated sample and released result for Request ID: " + selected.getId()
+                             + " (" + selected.getTestTypeName() + ")");
+
+            sendResultReadyNotification(selected);
+
+            loadSampleData();
+            loadProcessingData();
+            showAlert("Sample Validated", "Sample validated and result released to patient dashboard.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to validate sample. Please try again.");
         }
     }
 
@@ -438,30 +502,33 @@ public class AttendantDashboardController {
         String format = selected.getTestTypeResultFormat();
         String resultVal = null;
 
-        // Perform validations depending on layout
-        if ("numeric".equals(format)) {
-            resultVal = numericField.getText().trim();
-            if (resultVal.isEmpty()) {
-                showResultError("Numeric result field is empty.");
-                return;
-            }
-            try {
-                Double.parseDouble(resultVal);
-            } catch (NumberFormatException e) {
-                showResultError("Result must be a valid number.");
-                return;
-            }
-        } else if ("text".equals(format)) {
-            resultVal = textResultArea.getText().trim();
-            if (resultVal.isEmpty()) {
-                showResultError("Result comment text area is empty.");
-                return;
-            }
-        } else if ("PDF".equals(format) || "image".equals(format)) {
-            if (selectedFileBytes == null) {
-                showResultError("Please attach a " + format + " file.");
-                return;
-            }
+        if (null != format) // Perform validations depending on layout
+        switch (format) {
+            case "numeric":
+                resultVal = numericField.getText().trim();
+                if (resultVal.isEmpty()) {
+                    showResultError("Numeric result field is empty.");
+                    return;
+                }   try {
+                    Double.valueOf(resultVal);
+                } catch (NumberFormatException e) {
+                    showResultError("Result must be a valid number.");
+                    return;
+                }   break;
+            case "text":
+                resultVal = textResultArea.getText().trim();
+                if (resultVal.isEmpty()) {
+                    showResultError("Result comment text area is empty.");
+                    return;
+                }   break;
+            case "PDF":
+            case "image":
+                if (selectedFileBytes == null) {
+                    showResultError("Please attach a " + format + " file.");
+                    return;
+                }   break;
+            default:
+                break;
         }
 
         // Upsert results table

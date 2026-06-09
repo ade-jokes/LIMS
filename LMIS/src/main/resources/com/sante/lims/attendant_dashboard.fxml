@@ -82,22 +82,25 @@
                <content>
                   <VBox spacing="15.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
                            <children>
-                              <Label styleClass="text-header" text="Active Sample Tracking Board" HBox.hgrow="ALWAYS" />
-                              <Button mnemonicParsing="false" onAction="#handleMarkAsCollected" styleClass="button" text="Mark Sample Collected" />
+                              <Label styleClass="text-header" text="Sample Lifecycle Tracking Board" HBox.hgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" onAction="#handleMarkAsCollected" styleClass="button" text="Mark Collected" />
                               <Button mnemonicParsing="false" onAction="#handleMarkAsProcessing" styleClass="button" text="Send to Processing" />
+                              <Button fx:id="quickValidateButton" mnemonicParsing="false" onAction="#handleQuickValidate" styleClass="button" text="Validate Sample" />
                            </children>
                         </HBox>
+                        <Label style="-fx-font-size:11px; -fx-opacity:0.6;" text="Select a row then click the matching stage button. All paid samples (including Validated) are shown below." />
                         <TableView fx:id="sampleTable" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="colSampleId" prefWidth="60.0" text="ID" />
-                            <TableColumn fx:id="colSamplePatient" prefWidth="180.0" text="Patient Name" />
-                              <TableColumn fx:id="colSampleTest" prefWidth="200.0" text="Test Type" />
-                              <TableColumn fx:id="colSamplePay" prefWidth="120.0" text="Payment" />
+                            <TableColumn fx:id="colSampleId" prefWidth="55.0" text="ID" />
+                            <TableColumn fx:id="colSamplePatient" prefWidth="160.0" text="Patient Name" />
+                              <TableColumn fx:id="colSampleTest" prefWidth="180.0" text="Test Type" />
+                              <TableColumn fx:id="colSamplePay" prefWidth="90.0" text="Payment" />
                               <TableColumn fx:id="colSampleStatus" prefWidth="150.0" text="Sample Status" />
-                              <TableColumn fx:id="colSampleCollectedAt" prefWidth="140.0" text="Collected At" />
-                              <TableColumn fx:id="colSampleProcessedAt" prefWidth="140.0" text="Processing At" />
+                              <TableColumn fx:id="colSampleCollectedAt" prefWidth="130.0" text="Collected At" />
+                              <TableColumn fx:id="colSampleProcessedAt" prefWidth="130.0" text="Processed At" />
+                              <TableColumn fx:id="colSampleValidatedAt" prefWidth="130.0" text="Validated At" />
                           </columns>
                         </TableView>
                      </children>
