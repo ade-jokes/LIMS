@@ -290,5 +290,10 @@ public class DBConnection {
         stmt.execute("ALTER TABLE bank_details ADD COLUMN IF NOT EXISTS sort_code VARCHAR(30)");
         stmt.execute("ALTER TABLE bank_details ADD COLUMN IF NOT EXISTS instructions TEXT");
         stmt.execute("ALTER TABLE bank_details ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
+
+        // Fixes for Constraint Errors
+        stmt.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE");
+        stmt.execute("ALTER TABLE results DROP CONSTRAINT IF EXISTS results_request_id_fkey");
+        stmt.execute("ALTER TABLE results ADD CONSTRAINT results_request_id_fkey FOREIGN KEY (request_id) REFERENCES test_requests(id) ON DELETE CASCADE");
     }
 }

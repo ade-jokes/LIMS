@@ -404,15 +404,16 @@ public class AttendantDashboardController {
         filePane.setVisible(false);
         filePane.setManaged(false);
 
-        // Show matching input block
+        // Show matching input block — lowercase comparison so "PDF"/"pdf"/"Pdf" all work
         String format = req.getTestTypeResultFormat();
-        if ("numeric".equals(format)) {
+        String fmt = format != null ? format.toLowerCase() : "";
+        if ("numeric".equals(fmt)) {
             numericPane.setVisible(true);
             numericPane.setManaged(true);
-        } else if ("text".equals(format)) {
+        } else if ("text".equals(fmt)) {
             textPane.setVisible(true);
             textPane.setManaged(true);
-        } else if ("PDF".equals(format) || "image".equals(format)) {
+        } else if ("pdf".equals(fmt) || "image".equals(fmt)) {
             filePane.setVisible(true);
             filePane.setManaged(true);
             fileLabel.setText("Upload Attachment (" + format + ")");
@@ -433,11 +434,12 @@ public class AttendantDashboardController {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String value = rs.getString("result_value");
-                    if ("numeric".equals(format)) {
-                        numericField.setText(value);
-                    } else if ("text".equals(format)) {
-                        textResultArea.setText(value);
-                    } else if ("PDF".equals(format) || "image".equals(format)) {
+                    String fmt = format != null ? format.toLowerCase() : "";
+                    if ("numeric".equals(fmt)) {
+                        numericField.setText(value != null ? value : "");
+                    } else if ("text".equals(fmt)) {
+                        textResultArea.setText(value != null ? value : "");
+                    } else if ("pdf".equals(fmt) || "image".equals(fmt)) {
                         selectedFileName = rs.getString("file_name");
                         selectedFileBytes = rs.getBytes("file_data");
                         if (selectedFileName != null) {
@@ -501,32 +503,36 @@ public class AttendantDashboardController {
 
         String format = selected.getTestTypeResultFormat();
         String resultVal = null;
+        String fmt = format != null ? format.toLowerCase() : "";
 
-        if (null != format) // Perform validations depending on layout
-        switch (format) {
+        switch (fmt) {
             case "numeric":
                 resultVal = numericField.getText().trim();
                 if (resultVal.isEmpty()) {
                     showResultError("Numeric result field is empty.");
                     return;
-                }   try {
+                }
+                try {
                     Double.valueOf(resultVal);
                 } catch (NumberFormatException e) {
                     showResultError("Result must be a valid number.");
                     return;
-                }   break;
+                }
+                break;
             case "text":
                 resultVal = textResultArea.getText().trim();
                 if (resultVal.isEmpty()) {
                     showResultError("Result comment text area is empty.");
                     return;
-                }   break;
-            case "PDF":
+                }
+                break;
+            case "pdf":
             case "image":
                 if (selectedFileBytes == null) {
                     showResultError("Please attach a " + format + " file.");
                     return;
-                }   break;
+                }
+                break;
             default:
                 break;
         }
@@ -686,6 +692,63 @@ public class AttendantDashboardController {
     private void showCustomerProvisionError(String msg) {
         customerProvisionErrorLabel.setText(msg);
         customerProvisionErrorLabel.setVisible(true);
+    }
+
+
+    // --- DELETE DRAFT RESULT ---
+
+    @FXML
+    void handleDeleteDraftResult(ActionEvent event) {
+        TestRequest selected = processingTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("No Selection", "Please select a request from the Result Entry table first.");
+            return;
+        }
+
+        // Check if a non-validated draft exists
+        String checkSql = "SELECT is_validated FROM results WHERE request_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement checkPstmt = conn.prepareStatement(checkSql)) {
+            checkPstmt.setInt(1, selected.getId());
+            try (ResultSet rs = checkPstmt.executeQuery()) {
+                if (!rs.next()) {
+                    showAlert("No Draft", "No saved draft result exists for this request.");
+                    return;
+                }
+                if (rs.getBoolean("is_validated")) {
+                    showAlert("Cannot Delete", "This result has already been validated and released. Validated results cannot be deleted.");
+                    return;
+                }
+            }
+        } catch (SQLException e) { e.printStackTrace(); showAlert("Error", "Failed to check result status."); return; }
+
+        javafx.scene.control.Alert confirm = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Draft Result");
+        confirm.setHeaderText("Delete draft result for Request #" + selected.getId() + "?");
+        confirm.setContentText("The draft data will be permanently cleared. The request will remain in the processing queue.");
+        java.util.Optional<javafx.scene.control.ButtonType> res = confirm.showAndWait();
+        if (res.isPresent() && res.get() == javafx.scene.control.ButtonType.OK) {
+            String sql = "DELETE FROM results WHERE request_id = ? AND is_validated = false";
+            try (Connection conn = DBConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, selected.getId());
+                int rows = pstmt.executeUpdate();
+                if (rows > 0) {
+                    AuditService.log(attendantUser.getId(), attendantUser.getEmail(), "DELETE_DRAFT_RESULT",
+                            "Deleted unvalidated draft result for Request ID: " + selected.getId());
+                    // Reload the form to clear fields
+                    numericField.clear();
+                    textResultArea.clear();
+                    selectedFileBytes = null; selectedFileName = null;
+                    fileNameLabel.setText("No file selected");
+                    resultErrorLabel.setVisible(false);
+                    loadProcessingData();
+                    showAlert("Draft Deleted", "Draft result cleared. You can now re-enter the result data.");
+                } else {
+                    showAlert("Nothing Deleted", "No unvalidated draft was found to delete.");
+                }
+            } catch (SQLException e) { e.printStackTrace(); showAlert("Error", "Failed to delete draft result."); }
+        }
     }
 
     // --- General Actions ---

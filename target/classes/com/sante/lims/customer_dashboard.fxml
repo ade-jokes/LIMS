@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -41,12 +42,10 @@
       <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           
-          <!-- Tab 1: Book Test -->
           <Tab text="Book Diagnostics Test">
                <content>
                   <HBox spacing="20.0">
                      <children>
-                        <!-- Left available test menu -->
                         <VBox spacing="10.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label styleClass="text-header" text="Available Laboratory Tests Menu" />
@@ -61,7 +60,6 @@
                            </children>
                         </VBox>
                         
-                        <!-- Right order checkout card -->
                         <VBox prefWidth="380.0" spacing="15.0" styleClass="card">
                            <children>
                               <Label styleClass="text-header" text="Direct Checkout" />
@@ -79,7 +77,6 @@
                                  </children>
                               </VBox>
                               
-                              <!-- Bank transfer bank info — populated from DB on load -->
                               <VBox spacing="5.0" style="-fx-background-color: #0f172a; -fx-padding: 12px; -fx-background-radius: 6px; -fx-border-color: #0d9488; -fx-border-width: 1px; -fx-border-radius: 6px;">
                                  <children>
                                     <Label style="-fx-font-weight: bold; -fx-text-fill: #2dd4bf;" text="Lab Bank Account Details:" />
@@ -113,12 +110,16 @@
                </content>
           </Tab>
           
-          <!-- Tab 2: Patient Dashboard & Countdown -->
           <Tab text="Active Tracking &amp; Timers">
                <content>
                   <VBox spacing="15.0">
                      <children>
-                        <Label styleClass="text-header" text="Ongoing Test Requests &amp; Live Turnaround Timers" />
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                           <children>
+                              <Label styleClass="text-header" text="Ongoing Test Requests &amp; Live Turnaround Timers" HBox.hgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" onAction="#handleCancelBooking" style="-fx-background-color: #dc2626; -fx-text-fill: white;" text="✕ Cancel Booking" />
+                           </children>
+                        </HBox>
                         <TableView fx:id="activeRequestsTable" VBox.vgrow="ALWAYS">
                           <columns>
                             <TableColumn fx:id="colActId" prefWidth="60.0" text="ID" />
@@ -137,12 +138,10 @@
                </content>
           </Tab>
           
-          <!-- Tab 3: Result Vault -->
           <Tab text="Result Vault">
                <content>
                   <HBox spacing="20.0">
                      <children>
-                        <!-- Left completed results list -->
                         <VBox spacing="10.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label styleClass="text-header" text="Validated Laboratory Diagnostic Reports" />
@@ -157,7 +156,6 @@
                            </children>
                         </VBox>
                         
-                        <!-- Right detailed viewer pane -->
                         <VBox fx:id="resultViewerCard" prefWidth="420.0" spacing="12.0" styleClass="card">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -167,7 +165,6 @@
                                  </children>
                               </HBox>
 
-                              <!-- Patient + Test info block -->
                               <VBox spacing="6.0" style="-fx-background-color: #0f172a; -fx-padding: 12px; -fx-background-radius: 6px; -fx-border-color: #334155; -fx-border-width: 1px;">
                                  <children>
                                     <Label style="-fx-font-weight: bold; -fx-text-fill: #2dd4bf;" text="Patient Information" />
@@ -216,7 +213,6 @@
                                  </children>
                               </VBox>
 
-                              <!-- Numeric / Text result box -->
                               <VBox fx:id="viewContentBox" prefHeight="100.0" spacing="5.0" style="-fx-background-color: #0f172a; -fx-padding: 15; -fx-background-radius: 6px; -fx-border-color: #334155; -fx-border-width: 1px;">
                                  <children>
                                     <Label style="-fx-font-weight: bold; -fx-text-fill: #94a3b8;" text="Result Data:" />
@@ -224,7 +220,6 @@
                                  </children>
                               </VBox>
 
-                              <!-- Image preview -->
                               <VBox fx:id="viewImageContainer" alignment="CENTER" prefHeight="180.0" spacing="5.0" style="-fx-background-color: #0f172a; -fx-padding: 10; -fx-background-radius: 6px; -fx-border-color: #334155; -fx-border-width: 1px;">
                                  <children>
                                     <Label style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;" text="Medical Image Attachment:" />
@@ -232,7 +227,6 @@
                                  </children>
                               </VBox>
 
-                              <!-- PDF indicator -->
                               <VBox fx:id="viewPdfBox" spacing="6.0" style="-fx-background-color: #0f172a; -fx-padding: 12; -fx-background-radius: 6px; -fx-border-color: #334155; -fx-border-width: 1px;">
                                  <children>
                                     <Label style="-fx-font-size: 13px; -fx-text-fill: #94a3b8;" text="PDF Document Attached" />
@@ -254,6 +248,53 @@
                </content>
           </Tab>
           
+
+          <Tab text="My Profile">
+               <content>
+                  <HBox spacing="20.0" alignment="TOP_LEFT">
+                     <children>
+                        <VBox prefWidth="380.0" spacing="15.0" styleClass="card">
+                           <children>
+                              <Label styleClass="text-header" text="Edit My Profile" />
+                              <VBox spacing="5.0"><children>
+                                 <Label text="Full Name" />
+                                 <TextField fx:id="profileNameField" promptText="Your full name" />
+                              </children></VBox>
+                              <VBox spacing="5.0"><children>
+                                 <Label text="Email Address" />
+                                 <TextField fx:id="profileEmailField" promptText="Your email address" />
+                              </children></VBox>
+                              <Label fx:id="profileErrorLabel" textFill="#ef4444" visible="false" wrapText="true" />
+                              <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleSaveProfile" text="💾 Save Profile Changes" />
+                           </children>
+                           <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+                        </VBox>
+
+                        <VBox prefWidth="380.0" spacing="15.0" styleClass="card">
+                           <children>
+                              <Label styleClass="text-header" text="Change Password" />
+                              <VBox spacing="5.0"><children>
+                                 <Label text="Current Password" />
+                                 <PasswordField fx:id="currentPassField" promptText="••••••••" />
+                              </children></VBox>
+                              <VBox spacing="5.0"><children>
+                                 <Label text="New Password" />
+                                 <PasswordField fx:id="newPassField" promptText="Min 6 characters" />
+                              </children></VBox>
+                              <VBox spacing="5.0"><children>
+                                 <Label text="Confirm New Password" />
+                                 <PasswordField fx:id="confirmPassField" promptText="Repeat new password" />
+                              </children></VBox>
+                              <Label fx:id="passErrorLabel" textFill="#ef4444" visible="false" wrapText="true" />
+                              <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleChangePassword" text="🔒 Update Password" />
+                           </children>
+                           <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+                        </VBox>
+                     </children>
+                     <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+                  </HBox>
+               </content>
+          </Tab>
         </tabs>
       </TabPane>
    </center>

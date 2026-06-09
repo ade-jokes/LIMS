@@ -184,6 +184,7 @@
                                  <children>
                                     <Button fx:id="saveResultButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleSaveResult" styleClass="secondary-button" text="Save Draft Result" />
                                     <Button fx:id="validateResultButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleValidateResult" text="Validate &amp; Release Result" />
+                              <Button mnemonicParsing="false" onAction="#handleDeleteDraftResult" style="-fx-background-color: #dc2626; -fx-text-fill: white;" text="🗑 Delete Draft" />
                                  </children>
                               </VBox>
                            </children>
