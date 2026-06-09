@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <HBox prefHeight="640.0" prefWidth="900.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sante.lims.controller.RegisterController">
    <children>
@@ -16,22 +15,13 @@
          <children>
             <VBox spacing="2.0">
                <children>
-                  <Label text="SANTE" textFill="#ccfbf1">
-                     <font>
-                        <Font name="System Bold" size="40.0" />
-                     </font>
+                  <Label text="SANTE" textFill="#ccfbf1" style="-fx-font-weight: 800; -fx-font-size: 40px;">
                   </Label>
-                  <Label text="Diagnostics Ltd" textFill="#ffffff">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
+                  <Label text="Diagnostics Ltd" textFill="#ffffff" style="-fx-font-size: 24px;">
                   </Label>
                </children>
             </VBox>
-            <Label text="Digital Laboratory Portal" textFill="#d9f8f2" wrapText="true">
-               <font>
-                  <Font size="15.0" />
-               </font>
+            <Label text="Digital Laboratory Portal" textFill="#d9f8f2" wrapText="true" style="-fx-font-size: 15px;">
             </Label>
             <VBox spacing="12.0" style="-fx-border-color: rgba(255,255,255,0.30); -fx-border-width: 1 0 0 0; -fx-padding: 22 0 0 0;">
                <children>

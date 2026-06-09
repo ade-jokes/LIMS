@@ -170,22 +170,45 @@ public class TestRequest {
     }
 
     /**
-     * Formats the remaining time as HH:MM:SS or "Time's up" or "Completed".
+     * Formats the remaining time as HH:MM:SS or a human-readable status label.
+     * Payment state is checked first so the customer always knows where they are.
      */
     public String getCountdownText() {
         if ("Validated".equals(sampleStatus)) {
-            return "Completed";
+            return "✓ Result Ready";
         }
-        
+
+        if ("Unpaid".equals(paymentStatus)) {
+            return "Awaiting payment confirmation";
+        }
+
+        if ("Pending Collection".equals(sampleStatus)) {
+            return "Pending sample collection";
+        }
+
+        if ("Collected".equals(sampleStatus)) {
+            return "Sample collected — in queue";
+        }
+
+        if ("Processing".equals(sampleStatus)) {
+            long seconds = getSecondsRemaining();
+            if (seconds <= 0) {
+                return "Overdue — result pending";
+            }
+            long hours   = seconds / 3600;
+            long minutes = (seconds % 3600) / 60;
+            long secs    = seconds % 60;
+            return String.format("%02d:%02d:%02d remaining", hours, minutes, secs);
+        }
+
+        // Fallback for any unexpected state
         long seconds = getSecondsRemaining();
         if (seconds <= 0) {
-            return "Overdue / Pending Result";
+            return "Overdue — result pending";
         }
-
-        long hours = seconds / 3600;
+        long hours   = seconds / 3600;
         long minutes = (seconds % 3600) / 60;
-        long secs = seconds % 60;
-
-        return String.format("%02d:%02d:%02d", hours, minutes, secs);
+        long secs    = seconds % 60;
+        return String.format("%02d:%02d:%02d remaining", hours, minutes, secs);
     }
 }

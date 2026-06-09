@@ -4,21 +4,24 @@
    ================================================================ */
 
 /* ── 1. ROOT ─────────────────────────────────────────────────── */
+/* JavaFX font-family cascade: first match wins.
+   Segoe UI = Windows, .SF NS Text = macOS, Ubuntu = Ubuntu Linux,
+   Noto Sans = other Linux. This ensures correct rendering on all OS. */
 .root {
     -fx-background-color: #eef4f8;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
 }
 
 .root-pane {
     -fx-background-color: #eef4f8;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
 }
 
 .content-area {
     -fx-background-color: #eef4f8;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .content-inner {
@@ -46,34 +49,40 @@
 /* ── 3. TEXT STYLES ──────────────────────────────────────────── */
 .label {
     -fx-text-fill: #1f2937;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
+}
+
+/* Top navbar sits on #1e293b background — labels there set their own
+   textFill in FXML, but make sure they are never overridden by .label */
+.navbar-label {
+    -fx-text-fill: inherit;
 }
 
 .text-title {
     -fx-font-size: 30px;
     -fx-font-weight: 800;
     -fx-text-fill: #0f172a;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .text-subtitle {
     -fx-font-size: 13px;
     -fx-text-fill: #64748b;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .text-header {
     -fx-font-size: 18px;
     -fx-font-weight: 800;
     -fx-text-fill: #0f172a;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .text-card-val {
     -fx-font-size: 26px;
     -fx-font-weight: 800;
     -fx-text-fill: #0f766e;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 /* aliases used by controllers */
@@ -81,70 +90,70 @@
     -fx-font-size: 24px;
     -fx-font-weight: 800;
     -fx-text-fill: #0f172a;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .section-heading {
     -fx-font-size: 15px;
     -fx-font-weight: 700;
     -fx-text-fill: #1e293b;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .brand-title {
     -fx-font-size: 20px;
     -fx-font-weight: 800;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .brand-subtitle {
     -fx-font-size: 11px;
     -fx-text-fill: rgba(255,255,255,0.72);
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .form-heading {
     -fx-font-size: 20px;
     -fx-font-weight: 800;
     -fx-text-fill: #0f172a;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .field-label {
     -fx-font-size: 12px;
     -fx-font-weight: 700;
     -fx-text-fill: #334155;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .muted-text {
     -fx-font-size: 12px;
     -fx-text-fill: #64748b;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .error-label {
     -fx-font-size: 12px;
     -fx-text-fill: #dc2626;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .success-label {
     -fx-font-size: 12px;
     -fx-text-fill: #059669;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .countdown-label {
-    -fx-font-family: "Courier New", monospace;
+    -fx-font-family: "Courier New", "Ubuntu Mono", "Consolas", monospace;
     -fx-font-size: 15px;
     -fx-font-weight: 700;
     -fx-text-fill: #0f766e;
 }
 
 .countdown-ready {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-font-weight: 700;
     -fx-text-fill: #059669;
@@ -178,14 +187,14 @@
 }
 
 .stat-value {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 34px;
     -fx-font-weight: 800;
     -fx-text-fill: #0f766e;
 }
 
 .stat-label {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 12px;
     -fx-text-fill: #64748b;
 }
@@ -208,28 +217,28 @@
 }
 
 .test-card-name {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 14px;
     -fx-font-weight: 700;
     -fx-text-fill: #0f172a;
 }
 
 .test-card-category {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 11px;
     -fx-font-weight: 700;
     -fx-text-fill: #0f766e;
 }
 
 .test-card-price {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 18px;
     -fx-font-weight: 800;
     -fx-text-fill: #059669;
 }
 
 .test-card-tat {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 11px;
     -fx-text-fill: #64748b;
 }
@@ -247,7 +256,7 @@ PasswordField {
     -fx-border-radius: 7;
     -fx-background-radius: 7;
     -fx-padding: 9 12 9 12;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
 }
 
@@ -261,7 +270,7 @@ TextArea {
     -fx-border-radius: 7;
     -fx-background-radius: 7;
     -fx-padding: 9 12 9 12;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-control-inner-background: #ffffff;
 }
@@ -281,7 +290,7 @@ ComboBox {
     -fx-border-radius: 7;
     -fx-background-radius: 7;
     -fx-padding: 4 8 4 8;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
 }
 
@@ -296,7 +305,7 @@ PasswordField.text-field-custom {
     -fx-border-radius: 7;
     -fx-background-radius: 7;
     -fx-padding: 9 12 9 12;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
 }
 
@@ -327,7 +336,7 @@ ComboBox:focused {
 ComboBox .list-cell {
     -fx-text-fill: #0f172a;
     -fx-background-color: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-padding: 6 10 6 10;
 }
@@ -348,7 +357,7 @@ ComboBox .list-cell {
 Button {
     -fx-background-color: #0f766e;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-weight: 700;
     -fx-font-size: 13px;
     -fx-background-radius: 7;
@@ -370,7 +379,7 @@ Button:pressed {
 .btn-primary {
     -fx-background-color: #0f766e;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-weight: 700;
     -fx-font-size: 13px;
     -fx-background-radius: 7;
@@ -392,7 +401,7 @@ Button:pressed {
 .btn-primary-small {
     -fx-background-color: #0f766e;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-weight: 700;
     -fx-font-size: 11px;
     -fx-background-radius: 5;
@@ -408,7 +417,7 @@ Button:pressed {
 .btn-success-small {
     -fx-background-color: #059669;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-weight: 700;
     -fx-font-size: 11px;
     -fx-background-radius: 5;
@@ -424,7 +433,7 @@ Button:pressed {
 .btn-danger-small {
     -fx-background-color: #dc2626;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-weight: 700;
     -fx-font-size: 11px;
     -fx-background-radius: 5;
@@ -444,7 +453,7 @@ Button:pressed {
     -fx-border-radius: 7;
     -fx-background-radius: 7;
     -fx-text-fill: #334155;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-weight: 700;
     -fx-font-size: 13px;
     -fx-cursor: hand;
@@ -459,7 +468,7 @@ Button:pressed {
 .danger-button {
     -fx-background-color: #dc2626;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-weight: 700;
     -fx-background-radius: 7;
     -fx-border-radius: 7;
@@ -478,7 +487,7 @@ Button:pressed {
     -fx-border-width: 2;
     -fx-border-radius: 7;
     -fx-background-radius: 7;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-weight: 700;
     -fx-font-size: 13px;
     -fx-padding: 8 18 8 18;
@@ -501,7 +510,7 @@ Button:pressed {
 }
 
 .sidebar-title {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 16px;
     -fx-font-weight: 800;
     -fx-text-fill: #ffffff;
@@ -509,7 +518,7 @@ Button:pressed {
 }
 
 .sidebar-role {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 11px;
     -fx-text-fill: rgba(255,255,255,0.60);
     -fx-alignment: center;
@@ -518,7 +527,7 @@ Button:pressed {
 .sidebar-btn {
     -fx-background-color: transparent;
     -fx-text-fill: rgba(255,255,255,0.78);
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-font-weight: 600;
     -fx-alignment: CENTER-LEFT;
@@ -559,7 +568,7 @@ Button:pressed {
     -fx-background-radius: 8;
     -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.06), 16, 0.12, 0, 5);
     -fx-table-cell-border-color: transparent;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
 }
 
@@ -580,7 +589,7 @@ Button:pressed {
 .table-view .column-header .label {
     -fx-text-fill: #334155;
     -fx-font-weight: 800;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 12px;
     -fx-alignment: CENTER_LEFT;
 }
@@ -590,7 +599,7 @@ Button:pressed {
     -fx-border-color: transparent transparent #e8eef3 transparent;
     -fx-border-width: 0 0 1 0;
     -fx-padding: 4;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-cell-size: 38;
 }
@@ -616,14 +625,14 @@ Button:pressed {
 .table-cell {
     -fx-text-fill: #1f2937;
     -fx-padding: 10;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
 }
 
 .table-view .placeholder .label {
     -fx-text-fill: #64748b;
     -fx-font-size: 14px;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 /* ── 9. TAB PANE ─────────────────────────────────────────────── */
@@ -638,6 +647,12 @@ Button:pressed {
 
 .tab-pane .tab-header-background {
     -fx-background-color: #eef4f8;
+}
+
+/* Tab content area — must have background so it doesn't show through */
+.tab-pane > .tab-content-area {
+    -fx-background-color: #eef4f8;
+    -fx-padding: 0;
 }
 
 .tab {
@@ -656,7 +671,7 @@ Button:pressed {
 .tab .tab-label {
     -fx-text-fill: #475569;
     -fx-font-weight: 700;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
 }
 
@@ -666,7 +681,7 @@ Button:pressed {
 
 /* ── 10. TITLED PANE ─────────────────────────────────────────── */
 .titled-pane {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-font-weight: 700;
     -fx-text-fill: #0f172a;
@@ -734,7 +749,7 @@ Button:pressed {
 .hyperlink {
     -fx-text-fill: #0f766e;
     -fx-font-weight: 700;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-border-color: transparent;
     -fx-underline: true;
@@ -754,7 +769,7 @@ Button:pressed {
 /* ── 14. DIALOG / ALERT ──────────────────────────────────────── */
 .dialog-pane {
     -fx-background-color: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
 }
 
@@ -763,7 +778,7 @@ Button:pressed {
 }
 
 .dialog-pane .content.label {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 13px;
     -fx-text-fill: #1f2937;
 }
@@ -790,7 +805,7 @@ Button:pressed {
 .tooltip {
     -fx-background-color: #0f172a;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
     -fx-font-size: 12px;
     -fx-background-radius: 5;
     -fx-padding: 6 10 6 10;
@@ -805,7 +820,7 @@ Button:pressed {
     -fx-background-radius: 999;
     -fx-font-size: 11px;
     -fx-font-weight: 800;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .badge-unpaid {
@@ -815,7 +830,7 @@ Button:pressed {
     -fx-background-radius: 999;
     -fx-font-size: 11px;
     -fx-font-weight: 800;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .badge-pending {
@@ -825,7 +840,7 @@ Button:pressed {
     -fx-background-radius: 999;
     -fx-font-size: 11px;
     -fx-font-weight: 800;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .badge-collected {
@@ -835,7 +850,7 @@ Button:pressed {
     -fx-background-radius: 999;
     -fx-font-size: 11px;
     -fx-font-weight: 800;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .badge-processing {
@@ -845,7 +860,7 @@ Button:pressed {
     -fx-background-radius: 999;
     -fx-font-size: 11px;
     -fx-font-weight: 800;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .badge-completed {
@@ -855,7 +870,7 @@ Button:pressed {
     -fx-background-radius: 999;
     -fx-font-size: 11px;
     -fx-font-weight: 800;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .badge-cancelled {
@@ -865,7 +880,7 @@ Button:pressed {
     -fx-background-radius: 999;
     -fx-font-size: 11px;
     -fx-font-weight: 800;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 .badge-rejected {
@@ -875,7 +890,7 @@ Button:pressed {
     -fx-background-radius: 999;
     -fx-font-size: 11px;
     -fx-font-weight: 800;
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", ".SF NS Text", "Ubuntu", "Noto Sans", "Arial", sans-serif;
 }
 
 /* ── 18. INFO BANNERS ────────────────────────────────────────── */
@@ -913,4 +928,78 @@ Button:pressed {
     -fx-border-color: #fca5a5;
     -fx-border-width: 1;
     -fx-padding: 12 16 12 16;
+}
+/* ── 19. PLATFORM FIXES ──────────────────────────────────────── */
+
+/* BorderPane background — ensures no platform shows a grey/white
+   bleed behind the tab content or between the navbar and tabs */
+BorderPane, .border-pane {
+    -fx-background-color: #eef4f8;
+}
+
+/* ScrollPane viewport background — prevents white flash on Linux/Mac */
+.scroll-pane > .viewport,
+ScrollPane > .viewport {
+    -fx-background-color: #eef4f8;
+}
+
+/* VBox/HBox inside tab content — transparent so the tab-pane
+   background shows through (not a hard white that clashes) */
+.tab-pane > .tab-content-area > VBox,
+.tab-pane > .tab-content-area > HBox {
+    -fx-background-color: transparent;
+}
+
+/* Fix: "System Bold" font tag in FXML is Windows-only.
+   These rules ensure the navbar brand text is always bold
+   regardless of whether "System Bold" resolved. */
+.navbar-brand {
+    -fx-font-weight: 800;
+    -fx-font-size: 18px;
+    -fx-text-fill: #2dd4bf;
+}
+
+/* Fix: auth brand panel "SANTE" 40px heading — on non-Windows
+   "System Bold" falls back to plain regular weight.
+   The auth-brand-panel label gets forced bold here. */
+.auth-brand-panel > VBox > VBox > .label {
+    -fx-font-weight: 800;
+}
+
+/* Fix: TableView column header text was appearing black on
+   some platforms due to OS theme override */
+.table-view .column-header .label {
+    -fx-text-fill: #334155 !important;
+    -fx-font-weight: 800;
+    -fx-font-size: 12px;
+}
+
+/* Fix: selected table row text must always be white */
+.table-row-cell:selected > .table-cell {
+    -fx-text-fill: #ffffff;
+}
+
+/* Fix: ComboBox arrow button (shows OS default colour on Linux) */
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+.combo-box .arrow-button .arrow {
+    -fx-background-color: #64748b;
+}
+
+/* Fix: PasswordField and TextField inner content background
+   on macOS/Linux shows a dark inner background in some themes */
+.text-field > .text-field-content,
+TextField > .text-field-content,
+.password-field > .text-field-content,
+PasswordField > .text-field-content {
+    -fx-background-color: #ffffff;
+}
+
+/* Fix: Hyperlink visited state turns purple by default */
+.hyperlink:visited {
+    -fx-text-fill: #0f766e;
+}
+.hyperlink:hover:visited {
+    -fx-text-fill: #115e59;
 }

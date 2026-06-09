@@ -215,6 +215,7 @@
                            <children>
                               <Label styleClass="text-header" text="System Log File" HBox.hgrow="ALWAYS" />
                               <TextField fx:id="auditSearchField" prefWidth="250.0" promptText="Search actions or emails..." />
+                              <Button mnemonicParsing="false" onAction="#handleRefreshAudit" styleClass="secondary-button" text="↻ Refresh" />
                            </children>
                         </HBox>
                         <TableView fx:id="auditTable" VBox.vgrow="ALWAYS">

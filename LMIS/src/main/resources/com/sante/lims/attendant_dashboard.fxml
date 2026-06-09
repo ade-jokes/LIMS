@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="768.0" prefWidth="1024.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sante.lims.controller.AttendantDashboardController">
    <top>
@@ -21,10 +20,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="SANTE DIAGNOSTICS" textFill="#2dd4bf">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
+                  <Label text="SANTE DIAGNOSTICS" textFill="#2dd4bf" style="-fx-font-weight: 800; -fx-font-size: 18px;">
                   </Label>
                   <Label text="Lab Attendant Operational Console" textFill="#94a3b8" />
                </children>

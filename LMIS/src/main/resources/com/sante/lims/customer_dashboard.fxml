@@ -84,14 +84,14 @@
                                  </children>
                               </VBox>
                               
-                              <!-- Bank transfer bank info -->
+                              <!-- Bank transfer bank info — populated from DB on load -->
                               <VBox spacing="5.0" style="-fx-background-color: #0f172a; -fx-padding: 12px; -fx-background-radius: 6px; -fx-border-color: #0d9488; -fx-border-width: 1px; -fx-border-radius: 6px;">
                                  <children>
                                     <Label style="-fx-font-weight: bold; -fx-text-fill: #2dd4bf;" text="Lab Bank Account Details:" />
-                                    <Label text="Bank: Zenith Bank PLC" textFill="#f8fafc" />
-                                    <Label text="Account Name: Sante Diagnostics Ltd" textFill="#f8fafc" />
-                                    <Label text="Account Number: 1012345678" textFill="#f8fafc" />
-                                    <Label style="-fx-font-size: 11px;" text="*Please perform transfer before booking." textFill="#94a3b8" />
+                                    <Label fx:id="bankNameLabel" text="Loading..." textFill="#f8fafc" />
+                                    <Label fx:id="bankAccountNameLabel" text="" textFill="#f8fafc" />
+                                    <Label fx:id="bankAccountNumberLabel" text="" textFill="#f8fafc" />
+                                    <Label fx:id="bankInstructionsLabel" style="-fx-font-size: 11px;" text="" textFill="#94a3b8" wrapText="true" />
                                  </children>
                               </VBox>
                               

@@ -214,6 +214,7 @@ public class AdminDashboardController {
             testErrorLabel.setVisible(false);
 
             loadTestTypes();
+            loadAuditLogs();
 
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Success");
@@ -304,6 +305,7 @@ public class AdminDashboardController {
                              "Confirmed payment for Request ID: " + selected.getId() + " (Patient: " + selected.getCustomerEmail() + ")");
 
             loadRequests();
+            loadAuditLogs();
 
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Payment Confirmed");
@@ -382,6 +384,7 @@ public class AdminDashboardController {
             usrErrorLabel.setVisible(false);
 
             loadUsers();
+            loadAuditLogs();
 
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Success");
@@ -405,6 +408,11 @@ public class AdminDashboardController {
     }
 
     // --- Tab 4: Audit Trail Actions ---
+
+    @FXML
+    void handleRefreshAudit(ActionEvent event) {
+        loadAuditLogs();
+    }
 
     private void loadAuditLogs() {
         auditList.clear();

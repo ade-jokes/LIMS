@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="400.0" prefWidth="500.0" spacing="20.0" style="-fx-background-color: #0f172a;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sante.lims.controller.VerifyController">
    <children>
@@ -14,10 +13,7 @@
          <children>
             <VBox spacing="5.0">
                <children>
-                  <Label styleClass="text-title" text="Verify Email">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
+                  <Label styleClass="text-title" text="Verify Email" style="-fx-font-size: 22px;">
                   </Label>
                   <Label styleClass="text-subtitle" text="Please enter the 6-digit code sent to your registered email address." wrapText="true" />
                </children>
@@ -26,11 +22,7 @@
             <VBox spacing="10.0">
                <children>
                   <Label text="Verification Code" />
-                  <TextField fx:id="codeField" alignment="CENTER" promptText="123456" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-letter-spacing: 5;">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </TextField>
+                  <TextField fx:id="codeField" alignment="CENTER" promptText="123456" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-letter-spacing: 5;" />
                </children>
             </VBox>
             

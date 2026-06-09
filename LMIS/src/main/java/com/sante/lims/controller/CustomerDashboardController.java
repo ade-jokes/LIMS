@@ -57,6 +57,12 @@ public class CustomerDashboardController {
     @FXML private Label checkoutErrorLabel;
     @FXML private Button placeOrderButton;
 
+    // Bank Details Labels (populated from DB on initialize)
+    @FXML private Label bankNameLabel;
+    @FXML private Label bankAccountNameLabel;
+    @FXML private Label bankAccountNumberLabel;
+    @FXML private Label bankInstructionsLabel;
+
     // Tab 2: Patient Dashboard & Countdown
     @FXML private TableView<TestRequest> activeRequestsTable;
     @FXML private TableColumn<TestRequest, Integer> colActId;
@@ -112,6 +118,7 @@ public class CustomerDashboardController {
         loadTestMenu();
         loadActiveRequests();
         loadCompletedRequests();
+        loadBankDetails();
 
         // 3. Register Selection Listeners
         testMenuTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -165,6 +172,42 @@ public class CustomerDashboardController {
         colResName.setCellValueFactory(new PropertyValueFactory<>("testTypeName"));
         colResFormat.setCellValueFactory(new PropertyValueFactory<>("testTypeResultFormat"));
         colResValidated.setCellValueFactory(new PropertyValueFactory<>("validatedAt"));
+    }
+
+    // --- Bank Details (loaded from DB, shown in sidebar + booking dialog) ---
+
+    private String cachedBankName        = "Bank: First Bank Nigeria";
+    private String cachedBankAccountName = "Account Name: Sante Diagnostics Ltd";
+    private String cachedBankAccountNumber = "Account Number: N/A";
+    private String cachedBankInstructions  = "Use your Test Request ID as the payment reference.";
+
+    private void loadBankDetails() {
+        String sql = "SELECT bank_name, account_name, account_number, sort_code, instructions "
+                   + "FROM bank_details ORDER BY id ASC LIMIT 1";
+        try (Connection conn = DBConnection.getConnection();
+             java.sql.Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                cachedBankName         = "Bank: " + rs.getString("bank_name");
+                cachedBankAccountName  = "Account Name: " + rs.getString("account_name");
+                String num  = rs.getString("account_number");
+                String sort = rs.getString("sort_code");
+                cachedBankAccountNumber = "Account No: " + num
+                        + ((sort != null && !sort.isEmpty() && !"N/A".equals(sort))
+                           ? "  |  Sort Code: " + sort : "");
+                String instr = rs.getString("instructions");
+                if (instr != null && !instr.isEmpty()) {
+                    cachedBankInstructions = instr;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("[CustomerDashboard] Could not load bank_details — using defaults.");
+        }
+        // Populate sidebar labels (these fx:ids are declared in the FXML)
+        if (bankNameLabel          != null) bankNameLabel.setText(cachedBankName);
+        if (bankAccountNameLabel   != null) bankAccountNameLabel.setText(cachedBankAccountName);
+        if (bankAccountNumberLabel != null) bankAccountNumberLabel.setText(cachedBankAccountNumber);
+        if (bankInstructionsLabel  != null) bankInstructionsLabel.setText("* " + cachedBankInstructions);
     }
 
     // --- Tab 1: Book Test Actions ---
@@ -240,8 +283,23 @@ public class CustomerDashboardController {
             AuditService.log(patientUser.getId(), patientUser.getEmail(), "BOOK_TEST",
                              "Booked diagnostics test: " + selectedTestType.getName() + " (Evidence: " + evidence + ")");
 
-            showAlert("Booking Placed", "Your test booking has been placed successfully!\n"
-                    + "Once laboratory staff confirms your bank transfer reference, your sample collection will be initiated.");
+            // Show bank payment details in the confirmation dialog (spec §2.4)
+            Alert bankAlert = new Alert(AlertType.INFORMATION);
+            bankAlert.setTitle("Booking Confirmed — Payment Required");
+            bankAlert.setHeaderText("Your test booking has been placed successfully!");
+            bankAlert.setContentText(
+                "Please complete your bank transfer to:\n\n"
+                + "─────────────────────────────\n"
+                + cachedBankName + "\n"
+                + cachedBankAccountName + "\n"
+                + cachedBankAccountNumber + "\n"
+                + "─────────────────────────────\n\n"
+                + "Payment Reference: " + evidence + "\n\n"
+                + cachedBankInstructions + "\n\n"
+                + "Your sample collection begins once our staff confirms your payment."
+            );
+            bankAlert.getDialogPane().setMinWidth(480);
+            bankAlert.showAndWait();
 
             resetCheckoutForm();
             loadActiveRequests();
